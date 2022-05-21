@@ -1,0 +1,6 @@
+﻿@model BLL.Enums.MemberType
+
+
+@(Html.Kendo().DropDownListFor(m => m)
+   .BindTo(Html.GetEnumSelectList(Model.GetType()))
+   .OptionLabel("please select type"))

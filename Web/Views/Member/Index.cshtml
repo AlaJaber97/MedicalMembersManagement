@@ -1,0 +1,84 @@
+﻿@model IEnumerable<BLL.Modals.Member>
+
+@{
+    ViewData["Title"] = "Members Management";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Medical Members Management Screen</h1>
+
+@(Html.Kendo().Grid<BLL.Modals.Member>()
+    .Name("grid")
+    .DataSource(dataSource => dataSource
+        .Ajax()
+        .Events(events => events.Error("error_handler"))
+        .Model(model => model.Id(m => m.ID))
+        .Read(read => read.Action("List", "Member"))
+        .Update(update => update.Action("Update", "Member"))
+        .Destroy(update => update.Action("Destroy", "Member"))
+        .Create(update => update.Action("Create", "Member"))
+    )
+    .ToolBar(toolbar => toolbar.Create())
+    .Editable(editable => editable.Mode(GridEditMode.PopUp))
+    .Columns(columns =>
+    {
+        columns.Bound(p => p.NotionalID).Title("Notional ID").Width(120);
+        columns.Bound(p => p.FullName).Title("Full Name");
+        columns.Bound(p => p.DOB).Title("Birthday Date").Format("{0: MM/dd/yyyy}").Width(120) ;
+        columns.Bound(p => p.Age).Title("Age").Width(120);
+        columns.Bound(p => p.Type).Title("Type").Width(120);
+        columns.Bound(p => p.Status).Title("Status").Width(120);
+        columns.Command(options =>
+        {
+            options.Custom("View").Click("showDetails").IconClass("k-icon k-i-eye");;
+            options.Edit();
+            options.Destroy();
+        }).Width(400);
+    })
+    .Pageable()
+    .Sortable()
+)
+@(Html.Kendo().Window().Name("Details")
+    .Title("Member Details")
+    .Visible(false)
+    .Modal(true)
+    .Draggable(true)
+    .Width(300)
+)
+
+ <script type="text/x-kendo-template" id="template">
+    <div id="details-container">
+        <h2>#= FullName #</h2>
+        <em>#= NotionalID #</em>
+        <dl>
+            <dt>Birthday Date: #= kendo.toString(DOB, 'dd-MM-yyyy') #</dt>
+            <dt>Age: #= Age #</dt>
+        </dl>
+    </div>
+</script>
+
+<script type="text/javascript">
+    function error_handler(e) {
+            if (e.errors) {
+                var message = "Errors:\n";
+                $.each(e.errors, function (key, value) {
+                    if ('errors' in value) {
+                        $.each(value.errors, function() {
+                            message += this + "\n";
+                        });
+                    }
+                });
+                alert(message);
+            }
+        }
+    function showDetails(e) {
+        e.preventDefault();
+
+        var detailsTemplate = kendo.template($("#template").html());
+        var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+        var wnd = $("#Details").data("kendoWindow");
+
+        wnd.content(detailsTemplate(dataItem));
+        wnd.center().open();
+    }
+</script>

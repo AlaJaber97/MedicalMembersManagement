@@ -1,0 +1,72 @@
+﻿@model BLL.Modals.Identity.Register
+@{
+    ViewData["Title"] = "Register";
+}
+
+<div class="d-flex justify-content-center pt-4 login-form-page">
+    <div class="register-box" style="width:420px;">
+        <div class="card">
+            <div class="card-body login-card-body px-0">
+                <p class="login-box-msg text-center my-3 dark-color"><b style="font-size: 20px;">Register</b></p>
+            <div class="px-4 mt-4">
+                <form id="registerForm" method="post" class="form-horizontal">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div class="form-floating">
+                        <input asp-for="Username" class="form-control" autocomplete="username" aria-required="true" />
+                        <label asp-for="Username">Username</label>
+                        <span asp-validation-for="Username" class="text-danger"></span>
+                    </div>
+                    <br />
+                    <div class="form-floating">
+                        <input type="password" asp-for="Password" class="form-control eyes" autocomplete="new-password" aria-required="true" />
+                        <label asp-for="Password">Password</label>
+                        <span id="password-field" style="position:absolute;z-index:1; top:25px;right:20px;" class="fa fa-fw fa-eye"></span>
+                        <span asp-validation-for="Password" class="text-danger"></span>
+                    </div>
+                    <br />
+                    <div class="form-floating">
+                        <input type="password" asp-for="ConfirmPassword" class="form-control re-eyes" autocomplete="confirm-password" aria-required="true" />
+                        <label asp-for="ConfirmPassword">Retype Password</label>
+                        <span id="RetypePassword-field" style="position:absolute;z-index:1; top:25px;right:20px;" class="fa fa-fw fa-eye"></span>
+                        <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+                    </div>
+                    <br />
+                    <div class="input-group mb-1">
+                        <button id="registerSubmit" type="submit" class="btn btn-primary w-100 my-3 rounded-3 p-2">
+                            <span class="my-1">Register</span>
+                            </button>
+                    </div>
+                </form>
+            </div>
+                <hr />
+                <p class="mb-0 text-center py-1">
+                    Have Account?
+                    <a href="/Account/Login" class="text-center underline px-2">Login</a>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+        <script type="text/javascript">
+        $("#password-field").click(function () {
+            $(this).toggleClass("fa-eye fa-eye-slash");
+            if ($(".eyes").attr("type") == "password") {
+                $(".eyes").attr("type", "text");
+            } else {
+                $(".eyes").attr("type", "password");
+            }
+        });
+
+        $("#RetypePassword-field").click(function () {
+            $(this).toggleClass("fa-eye fa-eye-slash");
+            if ($(".re-eyes").attr("type") == "password") {
+                $(".re-eyes").attr("type", "text");
+            } else {
+                $(".re-eyes").attr("type", "password");
+            }
+        });
+    </script>
+}

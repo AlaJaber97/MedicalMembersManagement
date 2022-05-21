@@ -1,0 +1,6 @@
+﻿@model DateTime  
+
+@(Html.Kendo().DatePickerFor(m => m)
+          .Value(Model)
+          .HtmlAttributes(new { style = "width: 100%", title = "datepicker" })
+        )
