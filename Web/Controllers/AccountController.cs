@@ -62,8 +62,11 @@ namespace Web.Controllers
             var response = await _httpClient.PostAsJsonAsync($"{ApiUri}/Account/Register", RegisterRequest);
             if (response.IsSuccessStatusCode)
             {
+                var access_token = await response.Content.ReadAsStringAsync();
+                HttpContext.Session.SetString("Token", access_token);
                 return RedirectToAction("Index", "Member");
             }
+            ModelState.AddModelError("", await response.Content.ReadAsStringAsync());
             RegisterRequest.Password = string.Empty;
             RegisterRequest.ConfirmPassword = string.Empty;
             return View(RegisterRequest);
